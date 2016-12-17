@@ -5,6 +5,7 @@ import validateInput from '../../../server/shared/validations/signup';
 import classnames from 'classnames';
 import TextFieldGroup from '../common/TextFieldGroup';
 import { browserHistory } from 'react-router';
+import isEmpty from 'lodash/isEmpty';
 
 class SignupForm extends React.Component {
 
@@ -17,11 +18,13 @@ class SignupForm extends React.Component {
 			email: '',
 			password: '',
 			passwordConfirmation: '',
-			timezone: ''
+			timezone: '',
+			invalid: false
 		};
 		// This way, we have the proper context in this function
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.checkUserExists = this.checkUserExists.bind(this);
 	}
 
 	isValid() {
@@ -32,6 +35,24 @@ class SignupForm extends React.Component {
 		}
 
 		return isValid;
+	}
+
+	checkUserExists(e) {
+		const field = e.target.name;
+		const val = e.target.value;
+
+		if (val !== '') {
+			this.props.isUserExists(val).then(res => {
+				let errors = this.state.errors;
+
+				if (res.data.user) {
+					errors[field] = 'There is user with such ' + field;
+				} else {
+					delete errors[field];
+				}
+				this.setState({ errors, invalid: !isEmpty(errors) });
+			});
+		}
 	}
 
 	handleChange(e) {
@@ -73,6 +94,7 @@ class SignupForm extends React.Component {
 				<TextFieldGroup
 					error={errors.username}
 					label="Username"
+					checkUserExists={this.checkUserExists}
 					onChange={this.handleChange}
 					value={this.state.username}
 					field="username"
@@ -81,6 +103,7 @@ class SignupForm extends React.Component {
 				<TextFieldGroup
 					error={errors.email}
 					label="Email"
+					checkUserExists={this.checkUserExists}
 					onChange={this.handleChange}
 					value={this.state.email}
 					field="email"
@@ -119,7 +142,7 @@ class SignupForm extends React.Component {
 				</div>
 
 				<div className="form-group">
-					<button disabled={this.state.isLoading} className="btn btn-primary btn-lg">
+					<button disabled={this.state.isLoading || this.state.invalid} className="btn btn-primary btn-lg">
 						Sign up
 					</button>
 				</div>
@@ -130,7 +153,8 @@ class SignupForm extends React.Component {
 
 SignupForm.propTypes = {
 	userSignupRequest: React.PropTypes.func.isRequired,
-	addFlashMessage: React.PropTypes.func.isRequired
+	addFlashMessage: React.PropTypes.func.isRequired,
+	isUserExists: React.PropTypes.func.isRequired
 };
 
 SignupForm.contextTypes = {
