@@ -1,7 +1,7 @@
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 import { connect } from 'react-redux';
-import { login } from '../../../client/actions/login';
+import { login } from '../../../client/actions/authActions';
 
 export default function validateInput(data) {
 	let errors = {};
