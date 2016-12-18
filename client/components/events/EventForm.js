@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createEvent } from '../../actions/eventActions';
+import createEvent from '../../actions/eventActions';
 import TextFieldGroup from '../common/TextFieldGroup';
 
 class EventForm extends React.Component {

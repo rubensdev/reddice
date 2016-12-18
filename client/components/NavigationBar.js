@@ -47,7 +47,7 @@ class NavigationBar extends React.Component {
 	}
 }
 
-NavigationBar.PropTypes = {
+NavigationBar.propTypes = {
 	auth: React.PropTypes.object.isRequired,
 	logout: React.PropTypes.func.isRequired
 };
