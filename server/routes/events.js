@@ -1,5 +1,5 @@
 import express from 'express';
-import authenticate from '../middleware/authenticate';
+import authenticate from '../middlewares/authenticate';
 
 let router = express.Router();
 
