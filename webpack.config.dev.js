@@ -31,8 +31,10 @@ export default {
 	resolve: {
 		extensions: ['', '.js']
 	},
+	/* This is not neccessary with jwtDecode package 
 	node: {
 		net: 'empty',
 		dns: 'empty'
 	}
+	*/
 }
